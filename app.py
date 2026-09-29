@@ -317,4 +317,7 @@ if __name__ == "__main__":
         server_name=os.getenv("GRADIO_SERVER_NAME", "0.0.0.0" if os.getenv("SPACE_ID") else "127.0.0.1"),
         server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")),
         auth=auth, theme=THEME, css=CSS,
+        # Serve the normal client-rendered app. Gradio's experimental server-side rendering adds a
+        # Node.js layer on Spaces that can leave the page unstyled if the browser app fails to load.
+        ssr_mode=False,
     )
