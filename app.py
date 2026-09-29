@@ -10,7 +10,6 @@ import inspect
 import os
 import threading
 
-
 import gradio as gr
 import pandas as pd
 
@@ -126,17 +125,20 @@ THEME = gr.themes.Base(
 ).set(**{k: v for name, value in _PALETTE.items() for k, v in ((name, value), (name + "_dark", value))
         if k in inspect.signature(gr.themes.Base.set).parameters})
 
-# Also switch Gradio into its dark mode before the page renders, so built-in components (charts,
-# dropdown menus, code blocks) pick their dark styling regardless of the operating system setting.
+# Also put Gradio into its dark mode so built-in components (charts, dropdown menus) use dark styling
+# whatever the operating system setting. This adds Gradio's `dark` class in place instead of reloading
+# the page with ?__theme=dark, which would load everything twice and cancel requests mid-flight.
 FORCE_THEME = """<script>
 (function () {
-  try {
-    var url = new URL(window.location.href);
-    if (url.searchParams.get("__theme") !== "dark") {
-      url.searchParams.set("__theme", "dark");
-      window.location.replace(url.toString());
-    }
-  } catch (e) {}
+  function applyDark() {
+    document.documentElement.classList.add("dark");
+    if (document.body) document.body.classList.add("dark");
+  }
+  applyDark();
+  document.addEventListener("DOMContentLoaded", applyDark);
+  new MutationObserver(function () {
+    if (document.body && !document.body.classList.contains("dark")) applyDark();
+  }).observe(document.documentElement, {subtree: true, attributes: true, attributeFilter: ["class"]});
 })();
 </script>"""
 
