@@ -356,4 +356,5 @@ if __name__ == "__main__":
         # Serve the normal client-rendered app. Gradio's experimental server-side rendering adds a
         # Node.js layer on Spaces that can leave the page unstyled if the browser app fails to load.
         ssr_mode=False,
+        share=True
     )
