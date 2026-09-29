@@ -8,6 +8,17 @@ questions, and every answer is shown next to the exact sources it cites.
 import html
 import os
 
+if os.getenv("SPACE_ID"):
+    try:
+        import spaces
+
+        @spaces.GPU(duration=1)
+        def _zerogpu_placeholder():
+            """Never called; satisfies ZeroGPU's startup check."""
+            return None
+    except ImportError:
+        pass
+
 import gradio as gr
 import pandas as pd
 
