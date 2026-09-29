@@ -10,20 +10,6 @@ import inspect
 import os
 import threading
 
-# Hugging Face's free tier now runs Gradio Spaces on ZeroGPU, which refuses to start unless the app
-# registers at least one @spaces.GPU function. This app needs no GPU (models run at OpenAI), so we
-# register a no-op placeholder that is never called. The `spaces` package exists only on Hugging Face,
-# so locally and in CI this block does nothing. Import it before anything else, as ZeroGPU requires.
-if os.getenv("SPACE_ID"):
-    try:
-        import spaces
-
-        @spaces.GPU(duration=1)
-        def _zerogpu_placeholder():
-            """Never called; satisfies ZeroGPU's startup check."""
-            return None
-    except ImportError:
-        pass
 
 import gradio as gr
 import pandas as pd
