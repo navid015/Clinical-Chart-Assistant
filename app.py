@@ -72,8 +72,6 @@ body, .gradio-container { background: var(--bg) !important; color: var(--text) !
 #masthead h1 { font-size: 1.9rem !important; font-weight: 700; margin: 0; letter-spacing: -0.02em;
   color: var(--text) !important; }
 #masthead p { color: var(--muted); margin: 0; font-size: 1rem; }
-#masthead .notice { margin-left: auto; font-size: 0.88rem; color: var(--amber); background: var(--amber-bg);
-  padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(255,181,71,0.35); }
 .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; color: var(--text); }
 .card h2 { font-size: 1.45rem; margin: 0 0 4px; color: var(--text); }
 .card .meta { color: var(--muted); font-size: 0.95rem; margin-bottom: 14px; line-height: 1.45; }
@@ -320,8 +318,7 @@ def read_doc(path, missing):
 def build_ui():
     with gr.Blocks(title="Clinical Chart Assistant") as ui:
         gr.HTML("""<div id='masthead'><h1>Chart assistant</h1>
-          <p>Ask about one patient's record. Every answer cites the notes it came from.</p>
-          <span class='notice'>Synthetic patients only. Not for clinical use.</span></div>""")
+          <p>Ask about one patient's record. Every answer cites the notes it came from.</p></div>""")
         if STARTUP_ERROR:
             gr.HTML(f"<div class='status error'>Startup problem: {esc(STARTUP_ERROR)}. If this Space was just "
                     "created, add OPENAI_API_KEY under Settings, then restart.</div>")
