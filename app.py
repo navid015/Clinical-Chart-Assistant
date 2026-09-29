@@ -7,7 +7,12 @@ questions, and every answer is shown next to the exact sources it cites.
 """
 import html
 import os
+import threading
 
+# Hugging Face's free tier now runs Gradio Spaces on ZeroGPU, which refuses to start unless the app
+# registers at least one @spaces.GPU function. This app needs no GPU (models run at OpenAI), so we
+# register a no-op placeholder that is never called. The `spaces` package exists only on Hugging Face,
+# so locally and in CI this block does nothing. Import it before anything else, as ZeroGPU requires.
 if os.getenv("SPACE_ID"):
     try:
         import spaces
@@ -30,13 +35,23 @@ PATIENTS = get_patients()
 PATIENT_CHOICES = [(p.label, p.id) for p in PATIENTS.values()]
 DEFAULT_PID = PATIENT_CHOICES[0][1]
 
-ASSISTANT, STARTUP_ERROR = None, None
-try:
-    ensure_index()
-    from chartrag.pipeline import ChartAssistant
-    ASSISTANT = ChartAssistant(patients=PATIENTS)
-except Exception as exc:  # show the problem in the UI instead of crashing the Space
-    STARTUP_ERROR = f"{type(exc).__name__}: {exc}"
+# The index and the assistant are created on the first question, not at import time. Hosts such as
+# Hugging Face ZeroGPU fork worker processes after import, and a database client opened before a fork
+# can hang in the child. Lazy creation also lets the page load even if the API key is missing.
+STARTUP_ERROR = ("OPENAI_API_KEY is not set" if config.LLM_MODE == "openai" and not os.getenv("OPENAI_API_KEY")
+                 else None)
+_ASSISTANT = None
+_LOCK = threading.Lock()
+
+
+def get_assistant():
+    global _ASSISTANT
+    with _LOCK:
+        if _ASSISTANT is None:
+            from chartrag.pipeline import ChartAssistant
+            ensure_index()
+            _ASSISTANT = ChartAssistant(patients=PATIENTS)
+    return _ASSISTANT
 
 esc = html.escape
 
@@ -46,7 +61,8 @@ CSS = """
   --paper: #FAFBFC; --ink: #16283A; --blue: #1F5A8C; --rule: #D7DEE6; --muted: #5B6B7B;
   --red: #B42318; --red-bg: #FDECEA; --amber: #8A5A00; --amber-bg: #FFF4DB; --green: #1E7A4C; --green-bg: #E7F5EE;
 }
-.gradio-container { max-width: 1440px !important; background: var(--paper) !important; }
+.gradio-container { max-width: 1440px !important; width: 100% !important; margin: 0 auto !important;
+  background: var(--paper) !important; }
 #masthead { padding: 8px 2px 14px; border-bottom: 2px solid var(--ink); margin-bottom: 12px;
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
 #masthead h1 { font-size: 1.65rem; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
@@ -86,6 +102,21 @@ details td, details th { text-align: left; padding: 3px 6px; border-bottom: 1px 
 .suggest button { font-size: 0.84rem !important; text-align: left !important; justify-content: flex-start !important; }
 #evidence { max-height: 720px; overflow-y: auto; }
 """
+
+# The design is light-only: a clinical chart should look the same on every machine. Gradio follows the
+# operating system's dark mode unless the URL says otherwise, so this runs before the page renders and
+# pins the light theme with Gradio's own ?__theme=light switch.
+FORCE_LIGHT = """<script>
+(function () {
+  try {
+    var url = new URL(window.location.href);
+    if (url.searchParams.get("__theme") !== "light") {
+      url.searchParams.set("__theme", "light");
+      window.location.replace(url.toString());
+    }
+  } catch (e) {}
+})();
+</script>"""
 
 THEME = gr.themes.Base(
     font=[gr.themes.GoogleFont("Public Sans"), "system-ui", "sans-serif"],
@@ -238,10 +269,12 @@ def answer(pid, history):
         return history, gr.update()
     plain = [{"role": m["role"], "content": message_text(m["content"])} for m in history]
     question, prior = plain[-1]["content"], plain[:-1]
-    if ASSISTANT is None:
-        msg = f"The assistant is not available: {STARTUP_ERROR}"
+    try:
+        assistant = get_assistant()
+    except Exception as exc:
+        msg = f"The assistant is not available: {type(exc).__name__}: {exc}"[:400]
         return history + [{"role": "assistant", "content": msg}], f"<div class='status error'>{esc(msg)}</div>"
-    result = ASSISTANT.ask(pid, question, prior)
+    result = assistant.ask(pid, question, prior)
     text = result.answer
     v = result.verification
     if result.status == "answered" and v and v.get("total") and v["supported"] < v["total"]:
@@ -319,7 +352,7 @@ if __name__ == "__main__":
     demo.launch(
         server_name=os.getenv("GRADIO_SERVER_NAME", "0.0.0.0" if os.getenv("SPACE_ID") else "127.0.0.1"),
         server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")),
-        auth=auth, theme=THEME, css=CSS,
+        auth=auth, theme=THEME, css=CSS, head=FORCE_LIGHT,
         # Serve the normal client-rendered app. Gradio's experimental server-side rendering adds a
         # Node.js layer on Spaces that can leave the page unstyled if the browser app fails to load.
         ssr_mode=False,
