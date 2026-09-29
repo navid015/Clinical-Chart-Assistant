@@ -1,0 +1,43 @@
+{
+  "patient_id": "P001",
+  "name": "Evelyn Hartwell",
+  "sex": "Female",
+  "date_of_birth": "1967-04-18",
+  "mrn": "SYN-100381",
+  "primary_care": "Dr. A. Lindqvist",
+  "allergies": [
+    {"substance": "Penicillin", "reaction": "Hives", "severity": "Moderate", "type": "Allergy", "recorded": "2009-06-02"}
+  ],
+  "problems": [
+    {"condition": "Type 2 diabetes mellitus with diabetic chronic kidney disease", "icd10": "E11.22", "onset": "2014", "status": "Active"},
+    {"condition": "Chronic kidney disease, stage 3a", "icd10": "N18.31", "onset": "2025-03", "status": "Active"},
+    {"condition": "Mild nonproliferative diabetic retinopathy without macular edema, bilateral", "icd10": "E11.3293", "onset": "2025-06", "status": "Active"},
+    {"condition": "Essential hypertension", "icd10": "I10", "onset": "2016", "status": "Active"},
+    {"condition": "Hyperlipidemia", "icd10": "E78.5", "onset": "2016", "status": "Active"}
+  ],
+  "medications": [
+    {"name": "Metformin", "dose": "500 mg", "route": "oral", "frequency": "twice daily", "status": "Active", "start": "2025-03-12", "indication": "Type 2 diabetes", "note": "Reduced from 1000 mg twice daily on 2025-03-12 because eGFR fell to 44"},
+    {"name": "Empagliflozin", "dose": "10 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2025-03-12", "indication": "Type 2 diabetes with CKD and albuminuria"},
+    {"name": "Lisinopril", "dose": "20 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2024-02-10", "indication": "Hypertension, albuminuria", "note": "Increased from 10 mg on 2024-02-10"},
+    {"name": "Atorvastatin", "dose": "40 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2024-02-10", "indication": "Hyperlipidemia", "note": "Increased from 20 mg on 2024-02-10"},
+    {"name": "Metformin", "dose": "1000 mg", "route": "oral", "frequency": "twice daily", "status": "Discontinued", "start": "2014-09", "stop": "2025-03-12", "reason": "Dose reduced for eGFR 44"}
+  ],
+  "labs": [
+    {"test": "Hemoglobin A1c", "loinc": "4548-4", "unit": "%", "ref_range": "4.0-5.6", "results": [
+      {"date": "2024-02-10", "value": 8.9}, {"date": "2024-08-14", "value": 8.1}, {"date": "2025-03-05", "value": 7.8}, {"date": "2025-09-10", "value": 7.2}, {"date": "2026-03-11", "value": 6.9}]},
+    {"test": "eGFR (CKD-EPI 2021)", "loinc": "98979-8", "unit": "mL/min/1.73m2", "ref_range": ">=60", "results": [
+      {"date": "2024-02-10", "value": 58}, {"date": "2024-08-14", "value": 52}, {"date": "2025-03-05", "value": 44}, {"date": "2025-09-10", "value": 45}, {"date": "2026-03-11", "value": 46}]},
+    {"test": "Urine albumin/creatinine ratio", "loinc": "9318-7", "unit": "mg/g", "ref_range": "<30", "results": [
+      {"date": "2024-02-10", "value": 45}, {"date": "2024-08-14", "value": 78}, {"date": "2025-03-05", "value": 110}, {"date": "2025-09-10", "value": 84}, {"date": "2026-03-11", "value": 62}]},
+    {"test": "LDL cholesterol (calculated)", "loinc": "13457-7", "unit": "mg/dL", "ref_range": "<100", "results": [
+      {"date": "2024-02-10", "value": 128}, {"date": "2024-08-14", "value": 82}, {"date": "2026-03-11", "value": 74}]},
+    {"test": "Potassium", "loinc": "2823-3", "unit": "mmol/L", "ref_range": "3.5-5.1", "results": [
+      {"date": "2024-02-10", "value": 4.4}, {"date": "2025-03-05", "value": 4.8}, {"date": "2026-03-11", "value": 4.6}]}
+  ],
+  "suggested_questions": [
+    "How has her A1c changed over time?",
+    "Why was metformin reduced?",
+    "Any drug allergies?",
+    "What did the last eye exam show?"
+  ]
+}

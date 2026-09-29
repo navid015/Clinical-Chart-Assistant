@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+vector_db_*/
+logs/
+# reports/ is committed on purpose so the app's Evaluation tab can show the latest results

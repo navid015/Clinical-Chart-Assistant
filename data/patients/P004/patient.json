@@ -1,0 +1,45 @@
+{
+  "patient_id": "P004",
+  "name": "Dolores Kincaid",
+  "sex": "Female",
+  "date_of_birth": "1947-03-02",
+  "mrn": "SYN-427760",
+  "primary_care": "Dr. E. Vasquez (Geriatrics)",
+  "allergies": [
+    {"substance": "Codeine", "reaction": "Nausea and vomiting", "severity": "Moderate", "type": "Intolerance", "recorded": "2011-10-12"},
+    {"substance": "Latex", "reaction": "Contact dermatitis", "severity": "Mild", "type": "Allergy", "recorded": "2004-05-20"}
+  ],
+  "problems": [
+    {"condition": "Chronic obstructive pulmonary disease", "icd10": "J44.9", "onset": "2012", "status": "Active"},
+    {"condition": "Age-related osteoporosis", "icd10": "M81.0", "onset": "2022", "status": "Active"},
+    {"condition": "Displaced right femoral neck fracture, treated with hemiarthroplasty 2025-12-05", "icd10": "S72.001A", "onset": "2025-12-04", "status": "Resolved"},
+    {"condition": "Essential hypertension", "icd10": "I10", "onset": "2005", "status": "Active"},
+    {"condition": "Vitamin D deficiency", "icd10": "E55.9", "onset": "2025-12", "status": "Resolved"}
+  ],
+  "medications": [
+    {"name": "Fluticasone furoate/umeclidinium/vilanterol inhaler", "dose": "100/62.5/25 mcg", "route": "inhaled", "frequency": "1 inhalation once daily", "status": "Active", "start": "2025-05", "indication": "COPD"},
+    {"name": "Albuterol inhaler", "dose": "90 mcg", "route": "inhaled", "frequency": "2 puffs every 4-6 hours as needed", "status": "Active", "start": "2012", "indication": "COPD"},
+    {"name": "Amlodipine", "dose": "5 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2015", "indication": "Hypertension"},
+    {"name": "Cholecalciferol (vitamin D3)", "dose": "2000 IU", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2025-12-09", "indication": "Vitamin D deficiency, osteoporosis"},
+    {"name": "Calcium carbonate", "dose": "500 mg elemental calcium", "route": "oral", "frequency": "once daily with food", "status": "Active", "start": "2022", "indication": "Osteoporosis"},
+    {"name": "Zoledronic acid", "dose": "5 mg", "route": "intravenous", "frequency": "once yearly", "status": "Active", "start": "2026-02-20", "indication": "Osteoporosis after fragility fracture", "note": "First infusion given 2026-02-20"},
+    {"name": "Alendronate", "dose": "70 mg", "route": "oral", "frequency": "once weekly", "status": "Discontinued", "start": "2022-03", "stop": "2025-12-09", "reason": "Reflux symptoms and missed doses; switched to yearly IV zoledronic acid"},
+    {"name": "Enoxaparin", "dose": "40 mg", "route": "subcutaneous", "frequency": "once daily for 28 days after surgery", "status": "Completed", "start": "2025-12-06", "stop": "2026-01-02", "indication": "VTE prophylaxis after hip fracture surgery"}
+  ],
+  "labs": [
+    {"test": "Hemoglobin", "loinc": "718-7", "unit": "g/dL", "ref_range": "12.0-15.5", "results": [
+      {"date": "2025-12-04", "value": 12.4}, {"date": "2025-12-06", "value": 9.8}, {"date": "2025-12-09", "value": 10.3}, {"date": "2026-02-20", "value": 11.9}]},
+    {"test": "25-hydroxyvitamin D", "loinc": "62292-8", "unit": "ng/mL", "ref_range": "30-100", "results": [
+      {"date": "2025-12-05", "value": 18}, {"date": "2026-02-10", "value": 34}]},
+    {"test": "Calcium", "loinc": "17861-6", "unit": "mg/dL", "ref_range": "8.6-10.3", "results": [
+      {"date": "2025-12-05", "value": 9.1}, {"date": "2026-02-10", "value": 9.4}]},
+    {"test": "Creatinine", "loinc": "2160-0", "unit": "mg/dL", "ref_range": "0.5-1.1", "results": [
+      {"date": "2025-12-04", "value": 0.9}, {"date": "2026-02-10", "value": 0.8}]}
+  ],
+  "suggested_questions": [
+    "What surgery did she have for her hip?",
+    "Is codeine a true allergy?",
+    "Why was alendronate stopped?",
+    "Were there any complications after surgery?"
+  ]
+}

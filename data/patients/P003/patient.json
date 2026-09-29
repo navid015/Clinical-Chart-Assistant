@@ -1,0 +1,38 @@
+{
+  "patient_id": "P003",
+  "name": "Priya Natarajan",
+  "sex": "Female",
+  "date_of_birth": "1992-08-09",
+  "mrn": "SYN-318852",
+  "primary_care": "Dr. M. Osei",
+  "allergies": [
+    {"substance": "No known drug allergies", "reaction": "", "severity": "", "type": "NKDA", "recorded": "2025-10-21"},
+    {"substance": "Cat dander", "reaction": "Rhinitis, wheezing", "severity": "Mild", "type": "Environmental", "recorded": "2015-04-03"}
+  ],
+  "problems": [
+    {"condition": "Moderate persistent asthma", "icd10": "J45.40", "onset": "2008", "status": "Active"},
+    {"condition": "Migraine without aura, not intractable", "icd10": "G43.009", "onset": "2016", "status": "Active"},
+    {"condition": "Allergic rhinitis due to animal dander", "icd10": "J30.81", "onset": "2015", "status": "Active"}
+  ],
+  "medications": [
+    {"name": "Budesonide/formoterol inhaler", "dose": "160/4.5 mcg", "route": "inhaled", "frequency": "2 puffs twice daily and 1 puff as needed (maintenance and reliever therapy)", "status": "Active", "start": "2025-11-18", "indication": "Asthma"},
+    {"name": "Cetirizine", "dose": "10 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2015-04", "indication": "Allergic rhinitis"},
+    {"name": "Sumatriptan", "dose": "50 mg", "route": "oral", "frequency": "as needed for migraine, may repeat once after 2 hours", "status": "Active", "start": "2017-01", "indication": "Migraine"},
+    {"name": "Topiramate", "dose": "50 mg", "route": "oral", "frequency": "nightly", "status": "Active", "start": "2026-02-24", "indication": "Migraine prevention", "note": "Started at 25 mg nightly, increased to 50 mg after 2 weeks"},
+    {"name": "Fluticasone propionate inhaler", "dose": "110 mcg", "route": "inhaled", "frequency": "2 puffs twice daily", "status": "Discontinued", "start": "2019-03", "stop": "2025-11-18", "reason": "Replaced by budesonide/formoterol maintenance and reliever therapy"},
+    {"name": "Albuterol inhaler", "dose": "90 mcg", "route": "inhaled", "frequency": "2 puffs every 4-6 hours as needed", "status": "Discontinued", "start": "2008", "stop": "2025-11-18", "reason": "Replaced as reliever by as-needed budesonide/formoterol"},
+    {"name": "Prednisone", "dose": "40 mg", "route": "oral", "frequency": "once daily for 5 days", "status": "Completed", "start": "2025-10-21", "stop": "2025-10-25", "indication": "Asthma exacerbation"}
+  ],
+  "labs": [
+    {"test": "Eosinophils, absolute", "loinc": "711-2", "unit": "cells/uL", "ref_range": "0-500", "results": [
+      {"date": "2025-10-21", "value": 380}, {"date": "2025-11-18", "value": 420}]},
+    {"test": "IgE, total", "loinc": "19113-0", "unit": "IU/mL", "ref_range": "<100", "results": [
+      {"date": "2025-11-18", "value": 210}]}
+  ],
+  "suggested_questions": [
+    "What happened at the October ED visit?",
+    "What did spirometry show?",
+    "Why wasn't propranolol used for migraine prevention?",
+    "What is her current asthma regimen?"
+  ]
+}

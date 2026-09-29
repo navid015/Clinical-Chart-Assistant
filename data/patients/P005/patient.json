@@ -1,0 +1,38 @@
+{
+  "patient_id": "P005",
+  "name": "Marcus Bellweather",
+  "sex": "Male",
+  "date_of_birth": "1974-06-11",
+  "mrn": "SYN-539104",
+  "primary_care": "Dr. T. Haugen",
+  "allergies": [
+    {"substance": "Iodinated contrast media", "reaction": "Hives", "severity": "Moderate", "type": "Allergy", "recorded": "2018-02-14", "note": "Premedicated with prednisone and diphenhydramine before contrast CT on 2025-08-06 without reaction"}
+  ],
+  "problems": [
+    {"condition": "Adenocarcinoma of sigmoid colon, stage IIIB (pT3 N1a M0), resected", "icd10": "C18.7", "onset": "2025-08", "status": "Active"},
+    {"condition": "Iron deficiency anemia secondary to chronic blood loss", "icd10": "D50.0", "onset": "2025-07", "status": "Resolved"},
+    {"condition": "Chemotherapy-induced peripheral neuropathy, grade 1", "icd10": "G62.0", "onset": "2025-11", "status": "Active"},
+    {"condition": "Gastroesophageal reflux disease", "icd10": "K21.9", "onset": "2019", "status": "Active"}
+  ],
+  "medications": [
+    {"name": "Omeprazole", "dose": "20 mg", "route": "oral", "frequency": "once daily before breakfast", "status": "Active", "start": "2019", "indication": "GERD"},
+    {"name": "Ferrous sulfate", "dose": "325 mg", "route": "oral", "frequency": "once daily", "status": "Discontinued", "start": "2025-07-08", "stop": "2026-01-12", "reason": "Iron stores and hemoglobin normalized"},
+    {"name": "Capecitabine", "dose": "1000 mg/m2", "route": "oral", "frequency": "twice daily on days 1-14 of each 21-day cycle", "status": "Completed", "start": "2025-09-22", "stop": "2025-12-28", "indication": "Adjuvant chemotherapy (CAPOX), 4 cycles"},
+    {"name": "Oxaliplatin", "dose": "130 mg/m2", "route": "intravenous", "frequency": "day 1 of each 21-day cycle", "status": "Completed", "start": "2025-09-22", "stop": "2025-12-15", "indication": "Adjuvant chemotherapy (CAPOX), 4 cycles"},
+    {"name": "Ondansetron", "dose": "8 mg", "route": "oral", "frequency": "every 8 hours as needed for nausea", "status": "Discontinued", "start": "2025-09-22", "stop": "2026-01-12", "reason": "Chemotherapy completed"}
+  ],
+  "labs": [
+    {"test": "Hemoglobin", "loinc": "718-7", "unit": "g/dL", "ref_range": "13.5-17.5", "results": [
+      {"date": "2025-07-08", "value": 10.1}, {"date": "2025-08-18", "value": 11.2}, {"date": "2025-12-15", "value": 12.6}, {"date": "2026-01-12", "value": 13.8}]},
+    {"test": "Ferritin", "loinc": "2276-4", "unit": "ng/mL", "ref_range": "30-400", "results": [
+      {"date": "2025-07-08", "value": 8}, {"date": "2026-01-12", "value": 64}]},
+    {"test": "CEA", "loinc": "2039-6", "unit": "ng/mL", "ref_range": "<3.0", "results": [
+      {"date": "2025-08-04", "value": 6.8}, {"date": "2025-09-10", "value": 2.1}, {"date": "2026-01-12", "value": 1.9}]}
+  ],
+  "suggested_questions": [
+    "What stage is his colon cancer?",
+    "Walk me through his diagnosis timeline",
+    "What chemotherapy did he get and how did he tolerate it?",
+    "What is his contrast allergy history?"
+  ]
+}

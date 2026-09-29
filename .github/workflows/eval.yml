@@ -1,0 +1,38 @@
+name: Clinical eval gate
+
+# Runs the golden-set evaluation against real models on every pull request to main.
+# The job fails if any quality gate in eval/run_eval.py fails, which blocks the merge
+# when branch protection requires this check.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      AUDIT_LOG: "false"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - name: Run evaluation
+        run: |
+          if [ -z "$OPENAI_API_KEY" ]; then
+            echo "::warning::OPENAI_API_KEY secret not set; skipping evaluation."
+            exit 0
+          fi
+          python -m eval.run_eval
+      - name: Publish report to job summary
+        if: always()
+        run: '[ -f reports/eval_report.md ] && cat reports/eval_report.md >> "$GITHUB_STEP_SUMMARY" || true'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-report
+          path: reports/

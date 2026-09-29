@@ -1,0 +1,36 @@
+{
+  "patient_id": "P006",
+  "name": "Tomas Rivera",
+  "sex": "Male",
+  "date_of_birth": "1980-11-23",
+  "mrn": "SYN-640275",
+  "primary_care": "Dr. B. Achebe",
+  "allergies": [
+    {"substance": "No known drug allergies", "reaction": "", "severity": "", "type": "NKDA", "recorded": "2025-04-14"}
+  ],
+  "problems": [
+    {"condition": "Hypothyroidism due to Hashimoto thyroiditis", "icd10": "E06.3", "onset": "2019", "status": "Active"},
+    {"condition": "Major depressive disorder, recurrent, moderate", "icd10": "F33.1", "onset": "2017", "status": "Active"},
+    {"condition": "Obstructive sleep apnea, severe", "icd10": "G47.33", "onset": "2025-05", "status": "Active"},
+    {"condition": "Obesity, BMI 35-39.9", "icd10": "E66.9", "onset": "2015", "status": "Active"}
+  ],
+  "medications": [
+    {"name": "Levothyroxine", "dose": "112 mcg", "route": "oral", "frequency": "once daily on an empty stomach", "status": "Active", "start": "2025-04-14", "indication": "Hypothyroidism", "note": "Increased from 100 mcg on 2025-04-14"},
+    {"name": "Sertraline", "dose": "100 mg", "route": "oral", "frequency": "once daily", "status": "Active", "start": "2025-04-14", "indication": "Major depressive disorder", "note": "Increased from 50 mg on 2025-04-14"},
+    {"name": "CPAP", "dose": "10 cm H2O", "route": "device", "frequency": "nightly", "status": "Active", "start": "2025-06-02", "indication": "Obstructive sleep apnea"}
+  ],
+  "labs": [
+    {"test": "TSH", "loinc": "3016-3", "unit": "mIU/L", "ref_range": "0.4-4.0", "results": [
+      {"date": "2025-04-14", "value": 7.8}, {"date": "2025-07-15", "value": 3.1}, {"date": "2026-01-12", "value": 2.2}]},
+    {"test": "Free T4", "loinc": "3024-7", "unit": "ng/dL", "ref_range": "0.8-1.8", "results": [
+      {"date": "2025-04-14", "value": 0.8}, {"date": "2025-07-15", "value": 1.2}]},
+    {"test": "PHQ-9 total score", "loinc": "44261-6", "unit": "score", "ref_range": "0-4 minimal", "results": [
+      {"date": "2025-04-14", "value": 17}, {"date": "2025-07-22", "value": 11}, {"date": "2026-01-19", "value": 6}]}
+  ],
+  "suggested_questions": [
+    "How has his depression score changed?",
+    "What did the sleep study show?",
+    "Why was his TSH high in April 2025?",
+    "Is he using his CPAP?"
+  ]
+}

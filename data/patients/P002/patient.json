@@ -1,0 +1,230 @@
+{
+  "patient_id": "P002",
+  "name": "Raymond Okafor",
+  "sex": "Male",
+  "date_of_birth": "1955-01-30",
+  "mrn": "SYN-204417",
+  "primary_care": "Dr. S. Whitcombe",
+  "allergies": [
+    {
+      "substance": "Sulfonamide antibiotics (sulfamethoxazole)",
+      "reaction": "Diffuse maculopapular rash",
+      "severity": "Moderate",
+      "type": "Allergy",
+      "recorded": "2012-08-15",
+      "note": "Has tolerated furosemide (a non-antibiotic sulfonamide) since 2019 without reaction"
+    }
+  ],
+  "problems": [
+    {
+      "condition": "Chronic systolic (HFrEF) heart failure, ischemic cardiomyopathy",
+      "icd10": "I50.22",
+      "onset": "2019",
+      "status": "Active"
+    },
+    {
+      "condition": "Coronary artery disease, native vessel",
+      "icd10": "I25.10",
+      "onset": "2019",
+      "status": "Active"
+    },
+    {
+      "condition": "Old myocardial infarction (anterior STEMI 2019, drug-eluting stent to LAD)",
+      "icd10": "I25.2",
+      "onset": "2019-05",
+      "status": "Resolved"
+    },
+    {
+      "condition": "Paroxysmal atrial fibrillation",
+      "icd10": "I48.0",
+      "onset": "2023-02",
+      "status": "Active"
+    },
+    {
+      "condition": "Essential hypertension",
+      "icd10": "I10",
+      "onset": "2008",
+      "status": "Active"
+    }
+  ],
+  "medications": [
+    {
+      "name": "Sacubitril/valsartan",
+      "dose": "49/51 mg",
+      "route": "oral",
+      "frequency": "twice daily",
+      "status": "Active",
+      "start": "2023-03",
+      "indication": "HFrEF"
+    },
+    {
+      "name": "Metoprolol succinate",
+      "dose": "100 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Active",
+      "start": "2019-06",
+      "indication": "HFrEF, rate control"
+    },
+    {
+      "name": "Spironolactone",
+      "dose": "25 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Active",
+      "start": "2023-03",
+      "indication": "HFrEF"
+    },
+    {
+      "name": "Dapagliflozin",
+      "dose": "10 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Active",
+      "start": "2025-11-06",
+      "indication": "HFrEF"
+    },
+    {
+      "name": "Furosemide",
+      "dose": "40 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Active",
+      "start": "2025-11-06",
+      "indication": "Volume management",
+      "note": "Increased from 20 mg daily at discharge on 2025-11-06"
+    },
+    {
+      "name": "Apixaban",
+      "dose": "5 mg",
+      "route": "oral",
+      "frequency": "twice daily",
+      "status": "Active",
+      "start": "2023-02",
+      "indication": "Stroke prevention in atrial fibrillation"
+    },
+    {
+      "name": "Atorvastatin",
+      "dose": "80 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Active",
+      "start": "2019-05",
+      "indication": "CAD"
+    },
+    {
+      "name": "Aspirin",
+      "dose": "81 mg",
+      "route": "oral",
+      "frequency": "once daily",
+      "status": "Discontinued",
+      "start": "2019-05",
+      "stop": "2023-02",
+      "reason": "Stopped when apixaban was started, to reduce bleeding risk; more than 12 months after stent placement"
+    }
+  ],
+  "labs": [
+    {
+      "test": "NT-proBNP",
+      "loinc": "33762-6",
+      "unit": "pg/mL",
+      "ref_range": "<125",
+      "results": [
+        {
+          "date": "2025-11-02",
+          "value": 6840
+        },
+        {
+          "date": "2025-11-06",
+          "value": 3120
+        },
+        {
+          "date": "2026-01-15",
+          "value": 1450
+        },
+        {
+          "date": "2026-06-10",
+          "value": 980
+        }
+      ]
+    },
+    {
+      "test": "Potassium",
+      "loinc": "2823-3",
+      "unit": "mmol/L",
+      "ref_range": "3.5-5.1",
+      "results": [
+        {
+          "date": "2025-11-02",
+          "value": 4.1
+        },
+        {
+          "date": "2025-11-06",
+          "value": 4.3
+        },
+        {
+          "date": "2026-01-15",
+          "value": 5.3
+        },
+        {
+          "date": "2026-01-29",
+          "value": 4.9
+        },
+        {
+          "date": "2026-06-10",
+          "value": 4.7
+        }
+      ]
+    },
+    {
+      "test": "Creatinine",
+      "loinc": "2160-0",
+      "unit": "mg/dL",
+      "ref_range": "0.7-1.3",
+      "results": [
+        {
+          "date": "2025-11-02",
+          "value": 1.2
+        },
+        {
+          "date": "2025-11-06",
+          "value": 1.4
+        },
+        {
+          "date": "2026-01-15",
+          "value": 1.3
+        },
+        {
+          "date": "2026-06-10",
+          "value": 1.3
+        }
+      ]
+    },
+    {
+      "test": "Sodium",
+      "loinc": "2951-2",
+      "unit": "mmol/L",
+      "ref_range": "135-145",
+      "results": [
+        {
+          "date": "2025-11-02",
+          "value": 134
+        },
+        {
+          "date": "2025-11-06",
+          "value": 136
+        },
+        {
+          "date": "2026-06-10",
+          "value": 138
+        }
+      ]
+    }
+  ],
+  "suggested_questions": [
+    "Summarize the November 2025 admission",
+    "What was his most recent ejection fraction?",
+    "Why was aspirin stopped?",
+    "Has he tolerated furosemide despite his sulfa allergy?"
+  ]
+}

@@ -1,0 +1,30 @@
+name: Deploy to Hugging Face Space
+
+# After tests pass on main, mirror the repository to the Space.
+# Needs: repository secret HF_TOKEN (write access) and repository variable HF_SPACE,
+# for example "navid015/clinical-chart-assistant".
+on:
+  workflow_run:
+    workflows: [Tests]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_SPACE: ${{ vars.HF_SPACE }}
+        run: |
+          if [ -z "$HF_TOKEN" ] || [ -z "$HF_SPACE" ]; then
+            echo "::warning::Set the HF_TOKEN secret and HF_SPACE variable to enable deployment."
+            exit 0
+          fi
+          git push --force "https://${HF_SPACE%%/*}:${HF_TOKEN}@huggingface.co/spaces/${HF_SPACE}" HEAD:main
