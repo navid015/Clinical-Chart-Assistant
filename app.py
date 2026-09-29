@@ -6,6 +6,7 @@ structured record, never through the language model. The model is used only for 
 questions, and every answer is shown next to the exact sources it cites.
 """
 import html
+import inspect
 import os
 import threading
 
@@ -58,76 +59,102 @@ esc = html.escape
 # ------------------------------------------------------------------ styling
 CSS = """
 :root {
-  --paper: #FAFBFC; --ink: #16283A; --blue: #1F5A8C; --rule: #D7DEE6; --muted: #5B6B7B;
-  --red: #B42318; --red-bg: #FDECEA; --amber: #8A5A00; --amber-bg: #FFF4DB; --green: #1E7A4C; --green-bg: #E7F5EE;
+  --bg: #0D1117; --surface: #161B22; --surface-2: #1C2330; --rule: #2A3441; --text: #E6EDF3; --muted: #9AA7B8;
+  --accent: #7C8CFF; --violet: #B794F6; --cyan: #4FD1E8; --coral: #FF7A7A; --coral-bg: rgba(255,122,122,0.12);
+  --amber: #FFB547; --amber-bg: rgba(255,181,71,0.12); --green: #3DDC97; --green-bg: rgba(61,220,151,0.12);
 }
+body, .gradio-container { background: var(--bg) !important; color: var(--text) !important; }
 .gradio-container { max-width: 1440px !important; width: 100% !important; margin: 0 auto !important;
-  background: var(--paper) !important; }
-#masthead { padding: 8px 2px 14px; border-bottom: 2px solid var(--ink); margin-bottom: 12px;
-  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
-#masthead h1 { font-size: 1.65rem; font-weight: 700; color: var(--ink); margin: 0; letter-spacing: -0.01em; }
-#masthead p { color: var(--muted); margin: 0; font-size: 0.95rem; }
-#masthead .notice { margin-left: auto; font-size: 0.82rem; color: var(--amber); background: var(--amber-bg);
-  padding: 3px 10px; border-radius: 4px; }
-.card { background: #fff; border: 1px solid var(--rule); border-radius: 6px; padding: 14px 16px; color: var(--ink); }
-.card h2 { font-size: 1.3rem; margin: 0 0 2px; color: var(--ink); }
-.card .meta { color: var(--muted); font-size: 0.86rem; margin-bottom: 12px; }
-.card h3 { font-size: 0.9rem; font-weight: 600; color: var(--blue); margin: 14px 0 6px; }
-.card ul { margin: 0; padding-left: 18px; }
-.card li { margin: 2px 0; font-size: 0.9rem; line-height: 1.4; }
-.card .code { color: var(--muted); font-size: 0.8rem; }
-.band { border-left: 6px solid var(--red); background: var(--red-bg); padding: 10px 12px; border-radius: 4px; }
-.band.none { border-left-color: var(--muted); background: #EEF2F6; }
-.band strong { color: var(--red); font-size: 0.92rem; }
-.band.none strong { color: var(--ink); }
-.band div { font-size: 0.9rem; color: var(--ink); margin-top: 2px; }
-.tag { display: inline-block; font-size: 0.75rem; padding: 0 6px; border-radius: 3px; margin-left: 6px;
+  font-size: 16px !important; }
+#masthead { padding: 10px 2px 16px; margin-bottom: 14px; display: flex; flex-wrap: wrap;
+  align-items: baseline; gap: 6px 18px; border-bottom: 2px solid transparent;
+  border-image: linear-gradient(90deg, var(--cyan), var(--accent), var(--violet)) 1; }
+#masthead h1 { font-size: 1.9rem !important; font-weight: 700; margin: 0; letter-spacing: -0.02em;
+  color: var(--text) !important; }
+#masthead p { color: var(--muted); margin: 0; font-size: 1rem; }
+#masthead .notice { margin-left: auto; font-size: 0.88rem; color: var(--amber); background: var(--amber-bg);
+  padding: 4px 12px; border-radius: 999px; border: 1px solid rgba(255,181,71,0.35); }
+.card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 18px; color: var(--text); }
+.card h2 { font-size: 1.45rem; margin: 0 0 4px; color: var(--text); }
+.card .meta { color: var(--muted); font-size: 0.95rem; margin-bottom: 14px; line-height: 1.45; }
+.card h3 { font-size: 1rem; font-weight: 600; margin: 16px 0 6px; }
+.card h3.problems { color: var(--violet); } .card h3.meds { color: var(--cyan); }
+.card ul { margin: 0; padding-left: 20px; }
+.card li { margin: 4px 0; font-size: 0.98rem; line-height: 1.45; color: var(--text); }
+.card .code { color: var(--muted); font-size: 0.85rem; margin-left: 4px; }
+.band { border-left: 5px solid var(--coral); background: var(--coral-bg); padding: 11px 14px; border-radius: 6px; }
+.band.none { border-left-color: var(--green); background: var(--green-bg); }
+.band strong { color: var(--coral); font-size: 1rem; }
+.band.none strong { color: var(--green); }
+.band div { font-size: 0.98rem; color: var(--text); margin-top: 3px; }
+.tag { display: inline-block; font-size: 0.78rem; padding: 0 7px; border-radius: 999px; margin-left: 8px;
   border: 1px solid currentColor; }
 .tag.intol { color: var(--amber); } .tag.env { color: var(--muted); }
-.status { padding: 10px 12px; border-radius: 4px; font-weight: 600; font-size: 0.95rem; margin-bottom: 8px; }
-.status.answered { background: var(--green-bg); color: var(--green); }
-.status.not_documented, .status.blocked { background: var(--amber-bg); color: var(--amber); }
-.status.out_of_scope { background: #EEF2F6; color: var(--ink); }
-.status.error { background: var(--red-bg); color: var(--red); }
-.verify { font-size: 0.88rem; margin: 0 0 12px; color: var(--ink); }
+.status { padding: 11px 14px; border-radius: 8px; font-weight: 600; font-size: 1.02rem; margin-bottom: 10px;
+  border: 1px solid transparent; }
+.status.answered { background: var(--green-bg); color: var(--green); border-color: rgba(61,220,151,0.3); }
+.status.not_documented, .status.blocked { background: var(--amber-bg); color: var(--amber); border-color: rgba(255,181,71,0.3); }
+.status.out_of_scope { background: rgba(124,140,255,0.12); color: var(--accent); border-color: rgba(124,140,255,0.3); }
+.status.error { background: var(--coral-bg); color: var(--coral); border-color: rgba(255,122,122,0.3); }
+.verify { font-size: 0.95rem; margin: 0 0 12px; color: var(--muted); }
 .verify.warn { color: var(--amber); }
-.src { border: 1px solid var(--rule); border-radius: 6px; padding: 10px 12px; margin-bottom: 10px; background: #fff; }
-.src .head { font-size: 0.86rem; color: var(--blue); font-weight: 600; }
-.src .sub { font-size: 0.78rem; color: var(--muted); margin-bottom: 6px; }
-.src .body { font-size: 0.86rem; line-height: 1.5; color: var(--ink); white-space: pre-wrap; }
-details { font-size: 0.82rem; color: var(--muted); margin-top: 8px; }
-details table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
-details td, details th { text-align: left; padding: 3px 6px; border-bottom: 1px solid var(--rule); }
-.empty { color: var(--muted); font-size: 0.92rem; padding: 18px 4px; line-height: 1.5; }
-.suggest button { font-size: 0.84rem !important; text-align: left !important; justify-content: flex-start !important; }
-#evidence { max-height: 720px; overflow-y: auto; }
+.src { border: 1px solid var(--rule); border-left: 3px solid var(--cyan); border-radius: 8px; padding: 12px 14px;
+  margin-bottom: 10px; background: var(--surface); }
+.src .head { font-size: 0.98rem; color: var(--cyan); font-weight: 600; }
+.src .sub { font-size: 0.85rem; color: var(--muted); margin: 2px 0 8px; }
+.src .body { font-size: 0.95rem; line-height: 1.55; color: var(--text); white-space: pre-wrap; }
+details { font-size: 0.9rem; color: var(--muted); margin-top: 10px; }
+details summary { cursor: pointer; }
+details table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; margin-top: 6px; }
+details td, details th { text-align: left; padding: 4px 6px; border-bottom: 1px solid var(--rule); color: var(--text); }
+.empty { color: var(--muted); font-size: 1rem; padding: 18px 4px; line-height: 1.6; }
+.panel-title { font-size: 1.05rem; font-weight: 600; color: var(--text); }
+.suggest button { font-size: 0.92rem !important; }
+#evidence { max-height: 760px; overflow-y: auto; }
+#chat .message-content, #chat .message-content * { font-size: 1rem !important; line-height: 1.6 !important; }
 """
 
-# The design is light-only: a clinical chart should look the same on every machine. Gradio follows the
-# operating system's dark mode unless the URL says otherwise, so this runs before the page renders and
-# pins the light theme with Gradio's own ?__theme=light switch.
-FORCE_LIGHT = """<script>
+# One dark palette for both the light and the dark variant of every Gradio variable, so the app looks
+# the same whether the viewer's operating system is in light or dark mode.
+_PALETTE = {
+    "body_background_fill": "#0D1117", "background_fill_primary": "#0D1117", "background_fill_secondary": "#161B22",
+    "block_background_fill": "#161B22", "block_border_color": "#2A3441", "border_color_primary": "#2A3441",
+    "border_color_accent": "#7C8CFF", "border_color_accent_subdued": "#3B4470",
+    "body_text_color": "#E6EDF3", "body_text_color_subdued": "#9AA7B8",
+    "block_label_text_color": "#9AA7B8", "block_title_text_color": "#E6EDF3", "block_info_text_color": "#9AA7B8",
+    "input_background_fill": "#1C2330", "input_background_fill_focus": "#1C2330", "input_border_color": "#2A3441",
+    "input_border_color_focus": "#7C8CFF", "input_placeholder_color": "#6B7A8F",
+    "button_primary_background_fill": "#7C8CFF", "button_primary_background_fill_hover": "#96A3FF",
+    "button_primary_text_color": "#0D1117", "button_primary_border_color": "#7C8CFF",
+    "button_secondary_background_fill": "#1C2330", "button_secondary_background_fill_hover": "#253044",
+    "button_secondary_text_color": "#E6EDF3", "button_secondary_border_color": "#2A3441",
+    "color_accent": "#7C8CFF", "color_accent_soft": "#232B4A", "link_text_color": "#4FD1E8",
+    "link_text_color_hover": "#8BE4F2", "link_text_color_visited": "#4FD1E8", "link_text_color_active": "#4FD1E8",
+    "table_even_background_fill": "#161B22", "table_odd_background_fill": "#1C2330", "table_border_color": "#2A3441",
+    "code_background_fill": "#1C2330", "panel_background_fill": "#161B22", "panel_border_color": "#2A3441",
+    "checkbox_background_color": "#1C2330", "checkbox_border_color": "#2A3441",
+    "shadow_drop": "none", "shadow_drop_lg": "none",
+}
+THEME = gr.themes.Base(
+    font=[gr.themes.GoogleFont("Public Sans"), "system-ui", "sans-serif"],
+    primary_hue=gr.themes.colors.indigo, neutral_hue=gr.themes.colors.slate,
+    radius_size=gr.themes.sizes.radius_md, text_size=gr.themes.sizes.text_lg,
+).set(**{k: v for name, value in _PALETTE.items() for k, v in ((name, value), (name + "_dark", value))
+        if k in inspect.signature(gr.themes.Base.set).parameters})
+
+# Also switch Gradio into its dark mode before the page renders, so built-in components (charts,
+# dropdown menus, code blocks) pick their dark styling regardless of the operating system setting.
+FORCE_THEME = """<script>
 (function () {
   try {
     var url = new URL(window.location.href);
-    if (url.searchParams.get("__theme") !== "light") {
-      url.searchParams.set("__theme", "light");
+    if (url.searchParams.get("__theme") !== "dark") {
+      url.searchParams.set("__theme", "dark");
       window.location.replace(url.toString());
     }
   } catch (e) {}
 })();
 </script>"""
-
-THEME = gr.themes.Base(
-    font=[gr.themes.GoogleFont("Public Sans"), "system-ui", "sans-serif"],
-    primary_hue=gr.themes.colors.blue, neutral_hue=gr.themes.colors.slate, radius_size=gr.themes.sizes.radius_sm,
-).set(**{k: v for pair in [
-    ("body_background_fill", "#FAFBFC"), ("body_text_color", "#16283A"), ("block_background_fill", "#FFFFFF"),
-    ("block_border_color", "#D7DEE6"), ("border_color_primary", "#D7DEE6"), ("input_background_fill", "#FFFFFF"),
-    ("button_primary_background_fill", "#1F5A8C"), ("button_primary_background_fill_hover", "#174873"),
-    ("button_primary_text_color", "#FFFFFF"), ("block_label_text_color", "#5B6B7B"),
-    ("body_text_color_subdued", "#5B6B7B"), ("color_accent_soft", "#E6EEF6"),
-] for k, v in ((pair[0], pair[1]), (pair[0] + "_dark", pair[1]))})  # same palette in OS dark mode
 
 
 # ------------------------------------------------------------ patient panel
@@ -151,8 +178,8 @@ def patient_card(pid: str) -> str:
       <h2>{esc(p.name)}</h2>
       <div class='meta'>{p.age()}-year-old {esc(p.sex.lower())}, born {esc(p.dob)}. MRN {esc(p.mrn)}. PCP {esc(p.data.get('primary_care', ''))}.</div>
       {band}
-      <h3>Active problems</h3><ul>{problems}</ul>
-      <h3>Active medications</h3><ul>{meds}</ul>
+      <h3 class='problems'>Active problems</h3><ul>{problems}</ul>
+      <h3 class='meds'>Active medications</h3><ul>{meds}</ul>
     </div>"""
 
 
@@ -163,9 +190,9 @@ def lab_names(pid):
 def lab_frame(pid, test):
     lab = next((l for l in PATIENTS[pid].labs if l["test"] == test), None)
     if not lab:
-        return pd.DataFrame({"date": [], "value": []})
+        return pd.DataFrame({"date": [], "value": [], "series": []})
     return pd.DataFrame({"date": pd.to_datetime([r["date"] for r in lab["results"]]),
-                         "value": [r["value"] for r in lab["results"]]})
+                         "value": [r["value"] for r in lab["results"]], "series": lab["test"]})
 
 
 def lab_caption(pid, test):
@@ -306,11 +333,13 @@ def build_ui():
                     card = gr.HTML(patient_card(DEFAULT_PID))
                     lab = gr.Dropdown(lab_names(DEFAULT_PID), value=lab_names(DEFAULT_PID)[0], label="Lab trend")
                     plot = gr.LinePlot(lab_frame(DEFAULT_PID, lab_names(DEFAULT_PID)[0]), x="date", y="value",
-                                       x_title="Date", y_title="Result", height=220, show_label=False)
+                                       x_title="Date", y_title="Result", height=240, show_label=False,
+                                       color="series", color_map={l["test"]: "#4FD1E8" for p in PATIENTS.values() for l in p.labs},
+                                       colors_in_legend=[])
                     caption = gr.Markdown(lab_caption(DEFAULT_PID, lab_names(DEFAULT_PID)[0]))
 
                 with gr.Column(scale=5, min_width=340):
-                    chat = gr.Chatbot(height=520, show_label=False, placeholder=(
+                    chat = gr.Chatbot(height=560, show_label=False, elem_id="chat", placeholder=(
                         "Ask about this patient's history, results, medications or procedures. "
                         "Switching patients starts a new conversation."))
                     with gr.Row():
@@ -323,7 +352,7 @@ def build_ui():
                     clear = gr.Button("Start new conversation", size="sm")
 
                 with gr.Column(scale=4, min_width=300):
-                    gr.Markdown("**Sources for the latest answer**")
+                    gr.HTML("<div class='panel-title'>Sources for the latest answer</div>")
                     evidence = gr.HTML(EMPTY_EVIDENCE, elem_id="evidence")
 
         with gr.Tab("Evaluation"):
@@ -352,9 +381,8 @@ if __name__ == "__main__":
     demo.launch(
         server_name=os.getenv("GRADIO_SERVER_NAME", "0.0.0.0" if os.getenv("SPACE_ID") else "127.0.0.1"),
         server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")),
-        auth=auth, theme=THEME, css=CSS, head=FORCE_LIGHT,
+        auth=auth, theme=THEME, css=CSS, head=FORCE_THEME,
         # Serve the normal client-rendered app. Gradio's experimental server-side rendering adds a
         # Node.js layer on Spaces that can leave the page unstyled if the browser app fails to load.
         ssr_mode=False,
-        share=True
     )
