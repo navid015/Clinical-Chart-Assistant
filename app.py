@@ -311,9 +311,12 @@ def build_ui():
     return ui
 
 
+# Hugging Face's Gradio runner looks for a module-level Blocks object named `demo`.
+demo = build_ui()
+
 if __name__ == "__main__":
     auth = (os.getenv("APP_USER"), os.getenv("APP_PASSWORD")) if os.getenv("APP_USER") and os.getenv("APP_PASSWORD") else None
-    build_ui().launch(
+    demo.launch(
         server_name=os.getenv("GRADIO_SERVER_NAME", "0.0.0.0" if os.getenv("SPACE_ID") else "127.0.0.1"),
         server_port=int(os.getenv("GRADIO_SERVER_PORT", "7860")),
         auth=auth, theme=THEME, css=CSS,
